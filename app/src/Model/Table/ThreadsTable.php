@@ -6,6 +6,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\TableRegistry;
 
 /**
  * Threds Model
@@ -55,6 +56,12 @@ class ThreadsTable extends AppTable
             ->where(['flag' => self::PUBLIC_FLAG])
             ->first();
     }
+
+    public function createThreds($thread){
+        $newThread = $this->newEntity($thread);
+        $this->save($newThread);
+    }
+
 
     /**
     * Default validation rules.

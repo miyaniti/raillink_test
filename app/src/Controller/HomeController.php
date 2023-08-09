@@ -6,6 +6,8 @@ use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\View\Exception\MissingTemplateException;
 use Cake\ORM\TableRegistry;
+use App\Controller\AppController;
+use Cake\Controller\Controller;
 
 /**
  * Static content controller
@@ -41,7 +43,21 @@ class HomeController extends AppController
 
     public function thread($id)
     {
-        dd($this->ThreadsTable->getData($id));
-
+        $this->set('title',$title);
     }
+
+    public function createThreads(){
+        
+    }
+
+    public function submitForm() {
+        // POSTデータを取得
+        $thread = $this->request->getData();
+        
+        // 処理結果をビューに渡す
+        $this->ThreadsTable->createThreds($thread);
+        
+        return $this->redirect(['controller' => 'Home', 'action' => 'index']);
+    }
+
 }
