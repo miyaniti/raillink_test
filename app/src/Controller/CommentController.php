@@ -16,13 +16,13 @@ use Cake\Controller\Controller;
  *
  * @link https://book.cakephp.org/3.0/en/controllers/pages-controller.html
  */
-class HomeController extends AppController
+class CommentController extends AppController
 {
     /**
      * Initialization hook method.
      *
      * Use this method to add common initialization code like loading components.
-     *
+     *  
      * e.g. `$this->loadComponent('Security');`
      *
      * @return void
@@ -35,44 +35,40 @@ class HomeController extends AppController
         $this->CommentTable = TableRegistry::getTableLocator()->get("comments");
     }
 
-    public function index()
+    public function comment($id)
     {
-        $title = "掲示板";
-        $this->set('threads',$this->ThreadsTable->getList());
-        $this->set('title',$title);
+        //dd($id);
+        $this->set('threads',$this->ThreadsTable->getThreds($id));
+        $this->set('comments',$this->CommentTable->getComment($id));
+        $this->set('thread_id', $id);
     }
 
     public function thread($id)
     {
-        $this->set('title',$title);
+        //dd($id);
+        //dd($this->ThreadsTable->getData($id));
+        $this->set($id);
+
+
     }
 
-    /*
-    public function deleteThread($id)
-    {
-        // 処理結果をビューに渡す
-        $this->ThreadsTable->deleteThread($id);
-        
-        return $this->redirect(['controller' => 'Home', 'action' => 'index']);
-    }
-    */
-
-    public function deletes($id)
+    public function deleteComment($id, $thread_id)
     {
         // 処理結果をビューに渡す
         $this->CommentTable->deleteComment($id);
-        $this->ThreadsTable->deleteThread($id);
-        return $this->redirect(['controller' => 'Home', 'action' => 'index']);
+        return $this->redirect("/thread/$thread_id");
     }
 
-    public function submitForm() {
+    public function createComment() {
         // POSTデータを取得
-        $thread = $this->request->getData();
-        
+        $comment = $this->request->getData();
         // 処理結果をビューに渡す
-        $this->ThreadsTable->createThreds($thread);
-        
-        return $this->redirect(['controller' => 'Home', 'action' => 'index']);
+        $this->CommentTable->createComment($comment);
+
+        //$this->set('data', $this->request->getData());
+        return $this->redirect("/thread/{$comment['thread_id']}");
+
+        // return $this->redirect('/thread/{$comment["thread_id"]}');
     }
 
 }

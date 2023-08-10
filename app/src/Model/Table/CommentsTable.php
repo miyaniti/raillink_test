@@ -23,9 +23,9 @@ use Cake\ORM\TableRegistry;
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class ThreadsTable extends AppTable
+class commentsTable extends AppTable
 {
-    const TABLE = "threads";
+    const TABLE = "comments";
 
     const PUBLIC_FLAG = 2;
     /**
@@ -36,24 +36,18 @@ class ThreadsTable extends AppTable
     */
     public function initialize(array $config): void
     {
-        $this->setTable('threds');
-        $this->setDisplayField('tread');
+        $this->setTable('comments');
+        $this->setDisplayField('comment');
         $this->setPrimaryKey('id');
 
         parent::initialize($config);
     }
 
-    public function getList()
+    public function getComment($id)
     {
         return $this->find()
+            ->where(['thread_id' => $id])
             ->where(['flag' => self::PUBLIC_FLAG]);
-    }
-
-    public function getThreds($id)
-    {
-        return $this->find()
-            ->where(['flag' => self::PUBLIC_FLAG])
-            ->where(['id' => $id]);
     }
 
     public function getData($id)
@@ -63,25 +57,32 @@ class ThreadsTable extends AppTable
             ->where(['flag' => self::PUBLIC_FLAG])
             ->first();
     }
-
-    public function createThreds($thread){
-        $newThread = $this->newEntity($thread);
-        $this->save($newThread);
-    }
     /*
-    public function deleteThread($id){
-        $updateThread = $this->get($id);
-        $updateThread->flag = 1;
-        $this->save($updateThread);
+    public function deleteComment($id)
+    {
+        $updateComment = $this->get($id);
+        $updateComment->flag = 1;
+        $this->save($updateComment);
     }
     */
-    public function deleteThread($id){
-        if ($this->get($id)) {
-            $deleteThread = $this->get($id);
-            $this->delete($deleteThread);
+    public function deleteComment($thread_id)
+    {
+        if ($this->get($thread_id)) {
+            $deleteComment = $this->get($thread_id);
+            $this->delete($deleteComment);
         }
     }
 
+    public function createComment($comment){
+        //dd($comment["user_name"]);
+        $newComment = $this->newEntity();
+        $newComment->thread_id = $comment["thread_id"];
+        $newComment->user_name = $comment["user_name"];
+        $newComment->comment = $comment["comment"];
+        //$newComment->user_name = $this->newEntity($comment["user_name"]);
+        //$newComment->comment = $this->newEntity($comment["comment"]);
+        $this->save($newComment);
+    }
 
     /**
     * Default validation rules.
