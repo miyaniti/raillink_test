@@ -64,7 +64,7 @@ Router::scope('/', function (RouteBuilder $routes) {
      */
     $routes->connect('/', ['controller' => 'Home', 'action' => 'index']);
     $routes->connect('/thread/create/', ['controller' => 'Home', 'action' => 'submitForm']);
-    $routes->connect('/thread/*', ['controller' => 'Home', 'action' => 'thread']);
+    $routes->connect('/thread/*', ['controller' => 'Comment', 'action' => 'comment']);
 
     /**
      * ...and connect the rest of 'Pages' controller's URLs.
