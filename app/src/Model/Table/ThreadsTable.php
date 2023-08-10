@@ -68,6 +68,19 @@ class ThreadsTable extends AppTable
         $newThread = $this->newEntity($thread);
         $this->save($newThread);
     }
+    /*
+    public function deleteThread($id){
+        $updateThread = $this->get($id);
+        $updateThread->flag = 1;
+        $this->save($updateThread);
+    }
+    */
+    public function deleteThread($id){
+        if ($this->get($id)) {
+            $deleteThread = $this->get($id);
+            $this->delete($deleteThread);
+        }
+    }
 
 
     /**

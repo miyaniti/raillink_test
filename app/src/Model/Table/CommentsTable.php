@@ -57,6 +57,21 @@ class commentsTable extends AppTable
             ->where(['flag' => self::PUBLIC_FLAG])
             ->first();
     }
+    /*
+    public function deleteComment($id)
+    {
+        $updateComment = $this->get($id);
+        $updateComment->flag = 1;
+        $this->save($updateComment);
+    }
+    */
+    public function deleteComment($thread_id)
+    {
+        if ($this->get($thread_id)) {
+            $deleteComment = $this->get($thread_id);
+            $this->delete($deleteComment);
+        }
+    }
 
     public function createComment($comment){
         //dd($comment["user_name"]);

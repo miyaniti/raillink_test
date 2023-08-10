@@ -52,8 +52,11 @@ class CommentController extends AppController
 
     }
 
-    public function createThreads(){
-        
+    public function deleteComment($id, $thread_id)
+    {
+        // 処理結果をビューに渡す
+        $this->CommentTable->deleteComment($id);
+        return $this->redirect("/thread/$thread_id");
     }
 
     public function createComment() {
