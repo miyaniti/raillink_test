@@ -60,8 +60,8 @@ class HomeController extends AppController
     public function deletes($id)
     {
         // 処理結果をビューに渡す
-        $this->CommentTable->deleteComment($id);
         $this->ThreadsTable->deleteThread($id);
+        $this->CommentTable->deleteComments($id);
         return $this->redirect(['controller' => 'Home', 'action' => 'index']);
     }
 

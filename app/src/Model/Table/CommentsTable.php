@@ -73,6 +73,17 @@ class commentsTable extends AppTable
         }
     }
 
+    public function deleteComments($thread_id)
+    {
+        $this->deleteAll(['thread_id IN' => $thread_id]);
+        /*
+        $deleteComment = $this->find('all')
+            ->where(['thread_id' => $thread_id])
+            ->toList();
+        $this->deleteAll($deleteComment);
+        */
+    }
+
     public function createComment($comment){
         //dd($comment["user_name"]);
         $newComment = $this->newEntity();

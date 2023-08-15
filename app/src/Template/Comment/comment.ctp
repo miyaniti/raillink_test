@@ -11,6 +11,11 @@
 <h3 class="user_name"><?= $comment->user_name ?></h3>
 <div class="comment">
     <p class="comments"><?= $comment->comment ?> </p>
+    <p class="comments"><?= $comment->good_count ?></p>
+    <p><?= $this->Form->button('いいね', ['class' => 'border_btn08'], 
+    ['controller' => 'Comment', 'action' => 'goodindex',$thread->id]
+    )?></p>
+    <!--<p class="border_btn08"> <span>いいね</span></p> !-->
     <p class="deletecomment">
     <?= $this->Form->postLink('削除', 
     ['controller' => 'Comment','action' => 'deleteComment', $comment->id, $comment->thread_id],

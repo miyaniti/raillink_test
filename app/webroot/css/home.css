@@ -246,8 +246,12 @@ th,td {
     
 }
 .thread{
-    width: 90%;
+    width: 60%;
     font-size: 200%;       /* 文字サイズ指定 */
+}
+.datetime{
+    width: 30%;
+    font-size: 100%;       /* 文字サイズ指定 */
 }
 .create_thread{
     max-width: 300px;
@@ -281,6 +285,9 @@ table {
     margin: 10px 20px; /* 余白を削除 */
     font-size: 120%;
 }
+.deletecomment{
+    padding-left: 30px;
+}
 .create_user{
     width: 200px;
 }
@@ -288,3 +295,23 @@ table {
     width: 300px;
     top: 300px;
 }
+/*いいねボタン*/
+.border_btn08 {
+    margin-top: 30px;
+    display: inline-block;
+    padding: 5px 10px;
+    text-decoration: none;
+    background-color: #ff274b;
+    color: #FFF;
+    border-bottom: solid 4px #627295;
+    border-radius: 10px;
+  }
+  
+  .border_btn08:active {
+    -webkit-transform: translateY(4px);
+    transform: translateY(4px);
+    border-bottom: none;
+    background-color: #ff274b; /* 押したときも色を変えない */
+    outline: none; /* フォーカス時のアウトラインを削除 */
+  }
+  

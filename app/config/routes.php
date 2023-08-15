@@ -65,7 +65,9 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect('/', ['controller' => 'Home', 'action' => 'index']);
     $routes->post('/thread/create/', ['controller' => 'Home', 'action' => 'submitForm']);
     $routes->delete('/thread/delete/*', ['controller' => 'Home', 'action' => 'deleteThread']);
-    $routes->connect('/thread/*', ['controller' => 'Comment', 'action' => 'comment']);
+    $routes->connect('/comments/:id', ['controller' => 'Comment', 'action' => 'comment'], ['pass' => ['id']]);
+    $routes->connect('/', ['controller' => 'Home', 'action' => 'deletes']);
+
 
     /**
      * ...and connect the rest of 'Pages' controller's URLs.

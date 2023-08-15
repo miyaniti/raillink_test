@@ -37,7 +37,6 @@ class CommentController extends AppController
 
     public function comment($id)
     {
-        //dd($id);
         $this->set('threads',$this->ThreadsTable->getThreds($id));
         $this->set('comments',$this->CommentTable->getComment($id));
         $this->set('thread_id', $id);
@@ -56,7 +55,13 @@ class CommentController extends AppController
     {
         // 処理結果をビューに渡す
         $this->CommentTable->deleteComment($id);
-        return $this->redirect("/thread/$thread_id");
+        return $this->redirect("/comments/$thread_id");
+    }
+
+    public function deleteComments($thread_id)
+    {
+        // 処理結果をビューに渡す
+        $this->CommentTable->deleteComments($thread_id);
     }
 
     public function createComment() {
@@ -66,9 +71,14 @@ class CommentController extends AppController
         $this->CommentTable->createComment($comment);
 
         //$this->set('data', $this->request->getData());
-        return $this->redirect("/thread/{$comment['thread_id']}");
-
+        return $this->redirect("/comments/{$comment['thread_id']}");
+        //$routes->connect('/comments/:id', ['controller' => 'Comment', 'action' => 'comment'], ['pass' => ['id']]);
         // return $this->redirect('/thread/{$comment["thread_id"]}');
+    }
+
+    public function goodindex(){
+        
+
     }
 
 }

@@ -2,12 +2,13 @@
 <h1><?= $title ?></h1>
 
 <?php foreach($threads as $thread): ?>
-  <table>
-    <th class="thread"><a href="/thread/<?= $thread->id ?>/"><?= $thread->thread ?></a></th> 
-    <td class="removebotton"><?= $this->Form->postLink('削除', 
-      ['controller' => 'Home', 'action' => 'deletes', $thread->id],
-      ['confirm' => '本当に削除しますか？']); ?>
-    </td>
+<table>
+  <th class="thread"><a href="<?= $thread->getUrl() ?>"><?= $thread->thread ?></a></th> 
+  <th class="datetime"><?= $thread->getdeta() ?></th>
+  <td class="removebotton"><?= $this->Form->postLink('削除', 
+    ['controller' => 'Home', 'action' => 'deletes', $thread->id],
+    ['confirm' => '本当に削除しますか？']); ?>
+  </td>
 </table>
 <?php endforeach; ?>
 

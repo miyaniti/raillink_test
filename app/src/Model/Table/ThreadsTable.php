@@ -76,8 +76,7 @@ class ThreadsTable extends AppTable
     }
     */
     public function deleteThread($id){
-        if ($this->get($id)) {
-            $deleteThread = $this->get($id);
+        if ($deleteThread = $this->get($id)) {
             $this->delete($deleteThread);
         }
     }
