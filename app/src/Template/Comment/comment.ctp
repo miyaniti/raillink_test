@@ -1,3 +1,4 @@
+<?= $this->Html->css('home.css') ?>
 <h1><a href="/">トップへ</a>
 
 <?php foreach($threads as $thread): ?>
@@ -7,8 +8,20 @@
 ?>
 
 <?php foreach($comments as $comment): ?>
-<h3><?= $comment->user_name ?></h3>
-<p><?= $comment->comment ?></p>
+<h3 class="user_name"><?= $comment->user_name ?></h3>
+<div class="comment">
+    <p class="comments"><?= $comment->comment ?> </p>
+    <p class="comments"><?= $comment->good_count ?></p>
+    <p><?= $this->Form->button('いいね', ['class' => 'border_btn08'], 
+    ['controller' => 'Comment', 'action' => 'goodindex',$thread->id]
+    )?></p>
+    <!--<p class="border_btn08"> <span>いいね</span></p> !-->
+    <p class="deletecomment">
+    <?= $this->Form->postLink('削除', 
+    ['controller' => 'Comment','action' => 'deleteComment', $comment->id, $comment->thread_id],
+    ['confirm' => '本当に削除しますか？']); ?>
+    </p>
+</div>
 <?php endforeach; 
 ?>
 
@@ -31,23 +44,27 @@
         ]) 
     ?> 
 
-    <?= $this->Form->control( 'user_name', [
+    <div class="create_user">
+        <?= $this->Form->control( 'user_name', [
         'type' => 'text',  
         'label' => 'ユーザー名',  
         'div' => false,
         'maxlength' => '100',
         'class'=>'comment'
         ])
-    ?>
-
-    <?= $this->Form->control( 'comment', [
-        'type' => 'textarea',  
-        'label' => 'コメント',  
-        'div' => false,
-        'maxlength' => '1000',
-        'class'=>'comment'
-        ])
-    ?>
+        ?>
+    </div>
+    
+    <div class="create_comment">
+        <?= $this->Form->control( 'comment', [
+            'type' => 'textarea',  
+            'label' => 'コメント',  
+            'div' => false,
+            'maxlength' => '1000',
+            'class'=>'comment'
+            ])
+        ?>
+    </div>
 
     <?= $this->Form->control( 'thread_id', [
         'type' => 'hidden',  

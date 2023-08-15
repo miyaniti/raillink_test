@@ -63,8 +63,11 @@ Router::scope('/', function (RouteBuilder $routes) {
      * to use (in this case, src/Template/Pages/home.ctp)...
      */
     $routes->connect('/', ['controller' => 'Home', 'action' => 'index']);
-    $routes->connect('/thread/create/', ['controller' => 'Home', 'action' => 'submitForm']);
-    $routes->connect('/thread/*', ['controller' => 'Comment', 'action' => 'comment']);
+    $routes->post('/thread/create/', ['controller' => 'Home', 'action' => 'submitForm']);
+    $routes->delete('/thread/delete/*', ['controller' => 'Home', 'action' => 'deleteThread']);
+    $routes->connect('/comments/:id', ['controller' => 'Comment', 'action' => 'comment'], ['pass' => ['id']]);
+    $routes->connect('/', ['controller' => 'Home', 'action' => 'deletes']);
+
 
     /**
      * ...and connect the rest of 'Pages' controller's URLs.

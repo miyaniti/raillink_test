@@ -32,6 +32,7 @@ class HomeController extends AppController
         parent::initialize();
 
         $this->ThreadsTable = TableRegistry::getTableLocator()->get("threads");
+        $this->CommentTable = TableRegistry::getTableLocator()->get("comments");
     }
 
     public function index()
@@ -44,6 +45,24 @@ class HomeController extends AppController
     public function thread($id)
     {
         $this->set('title',$title);
+    }
+
+    /*
+    public function deleteThread($id)
+    {
+        // 処理結果をビューに渡す
+        $this->ThreadsTable->deleteThread($id);
+        
+        return $this->redirect(['controller' => 'Home', 'action' => 'index']);
+    }
+    */
+
+    public function deletes($id)
+    {
+        // 処理結果をビューに渡す
+        $this->ThreadsTable->deleteThread($id);
+        $this->CommentTable->deleteComments($id);
+        return $this->redirect(['controller' => 'Home', 'action' => 'index']);
     }
 
     public function submitForm() {

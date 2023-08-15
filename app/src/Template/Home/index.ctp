@@ -1,7 +1,18 @@
+<?= $this->Html->css('home.css') ?>
 <h1><?= $title ?></h1>
+
 <?php foreach($threads as $thread): ?>
-<h2><a href="/thread/<?= $thread->id ?>/"><?= $thread->thread ?></a></h2>
+<table>
+  <th class="thread"><a href="<?= $thread->getUrl() ?>"><?= $thread->thread ?></a></th> 
+  <th class="datetime"><?= $thread->getdeta() ?></th>
+  <td class="removebotton"><?= $this->Form->postLink('削除', 
+    ['controller' => 'Home', 'action' => 'deletes', $thread->id],
+    ['confirm' => '本当に削除しますか？']); ?>
+  </td>
+</table>
 <?php endforeach; ?>
+
+
 <html>
 <?php /*
     <form action="/controller/action" method="post">
@@ -18,7 +29,8 @@
       'type' => 'post',
       'url' => ['controller' => 'Home', 'action' => 'submitForm']
     ]) 
-  ?> 
+  ?>
+  <div class="create_thread"> 
   <?= $this->Form->control( 'thread', [
       'type' => 'text',  
       'label' => '新しいスレッドの作成',  
@@ -27,10 +39,12 @@
       'class'=>'thread'
     ])
   ?>
+</div>
 
   <!-- コントロールを配置 -->
-  <?= $this->Form->submit('作成する') ?>
+  <div class = "create_botton"><?= $this->Form->submit('作成する') ?></div>
 
   <!-- フォームの終了 -->
   <?= $this->Form->end() ?>
+
 </html>

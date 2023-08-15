@@ -238,3 +238,80 @@ hr {
         max-width: 940px;
     }
 }
+
+
+/* top画面の調整 */
+th,td {
+    border: solid 1px;              /* 枠線指定 */
+    
+}
+.thread{
+    width: 60%;
+    font-size: 200%;       /* 文字サイズ指定 */
+}
+.datetime{
+    width: 30%;
+    font-size: 100%;       /* 文字サイズ指定 */
+}
+.create_thread{
+    max-width: 300px;
+    margin: 10px 20px; /* 余白を削除 */
+}
+.create_botton{
+    margin: -5px 20px; /* 余白を削除 */
+}
+.removebotton {
+    width: 10%;
+    line-height: 5;
+    text-align: center;
+}
+table {
+    border-collapse: collapse;
+    display: inline-block;
+    margin: -5px 80px; /* 余白を削除 */
+}
+
+/* スレッド画面の調整 */
+.comment {
+    display: flex;
+    align-items: center; /* 垂直方向の中央揃え */
+}
+.user_name{
+    display: inline-block;
+    border-top: 2px solid;
+}
+.comments{
+    top:-50px;
+    margin: 10px 20px; /* 余白を削除 */
+    font-size: 120%;
+}
+.deletecomment{
+    padding-left: 30px;
+}
+.create_user{
+    width: 200px;
+}
+.create_comment{
+    width: 300px;
+    top: 300px;
+}
+/*いいねボタン*/
+.border_btn08 {
+    margin-top: 30px;
+    display: inline-block;
+    padding: 5px 10px;
+    text-decoration: none;
+    background-color: #ff274b;
+    color: #FFF;
+    border-bottom: solid 4px #627295;
+    border-radius: 10px;
+  }
+  
+  .border_btn08:active {
+    -webkit-transform: translateY(4px);
+    transform: translateY(4px);
+    border-bottom: none;
+    background-color: #ff274b; /* 押したときも色を変えない */
+    outline: none; /* フォーカス時のアウトラインを削除 */
+  }
+  
