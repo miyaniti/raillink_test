@@ -69,6 +69,9 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect('/', ['controller' => 'Home', 'action' => 'deletes']);
 
 
+    // config/routes.php
+    //$routes->connect('/comments/comment/:id', ['controller' => 'Your', 'action' => 'ajaxExample']);
+    $routes->connect('/comments/comment/:comment_id', ['controller' => 'Comment', 'action' => 'goodindex'], ['pass' => ['comment_id']]);
     /**
      * ...and connect the rest of 'Pages' controller's URLs.
      */

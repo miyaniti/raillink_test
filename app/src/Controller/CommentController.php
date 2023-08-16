@@ -76,9 +76,25 @@ class CommentController extends AppController
         // return $this->redirect('/thread/{$comment["thread_id"]}');
     }
 
-    public function goodindex(){
-        
+    public function goodindex($id){
+        /*
+        $count = $this->Counts->find()->firstOrFail();
+        $count->count++;
+        $this->Counts->save($count);
+        */
+        $commentcount = $this->CommentTable->get($id);
+        $commentcount->good_count++;
+        $this->CommentTable->save($commentcount);
 
+        $this->response->withType('text/plain');
+        //$this->response->body(json_encode(['count' => $commentcount->good_count]));
+        return $this->response->withStringBody($commentcount->good_count);
+        /*
+        $count = $this->Counts->find()->firstOrFail();
+        $count->count++;
+        $this->Counts->save($count);
+        echo $count->count;
+        */
     }
-
+    
 }
