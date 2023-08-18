@@ -8,6 +8,7 @@ use Cake\View\Exception\MissingTemplateException;
 use Cake\ORM\TableRegistry;
 use App\Controller\AppController;
 use Cake\Controller\Controller;
+use App\Controller\UsersController;
 
 /**
  * Static content controller
@@ -40,6 +41,25 @@ class CommentController extends AppController
         $this->set('threads',$this->ThreadsTable->getThreds($id));
         $this->set('comments',$this->CommentTable->getComment($id));
         $this->set('thread_id', $id);
+    }
+
+    public function commentUser($id)
+    {
+        $usersController = new UsersController();
+        if($usersController->getlogin()){
+            $user_name = $usersController->getlogin();
+            $this->set('threads',$this->ThreadsTable->getThreds($id));
+            $this->set('comments',$this->CommentTable->getComment($id));
+            $this->set('thread_id', $id);
+            /*ログイン情報取得 */
+            $userlist = $usersController->getlist($user_name);
+            $this->set('user_name', $userlist->user_name);
+            $this->set('user_id', $userlist->id);
+        }
+        else{
+            return $this->redirect("/comments/$id");
+        }
+
     }
 
     public function thread($id)

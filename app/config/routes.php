@@ -67,6 +67,11 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->delete('/thread/delete/*', ['controller' => 'Home', 'action' => 'deleteThread']);
     $routes->connect('/comments/:id', ['controller' => 'Comment', 'action' => 'comment'], ['pass' => ['id']]);
     $routes->connect('/', ['controller' => 'Home', 'action' => 'deletes']);
+    /*ログイン後の導線 */
+    $routes->connect('/users/index/',['controller' => 'Users', 'action' => 'index']);   
+    $routes->connect('/users/login', ['controller' => 'Users', 'action' => 'login']);
+    $routes->connect('/users/index/comments/:id', ['controller' => 'Comment', 'action' => 'commentUser'], ['pass' => ['id']]);
+    $routes->connect('/users/thread/create/', ['controller' => 'Users', 'action' => 'usersubmitForm']);
 
 
     // config/routes.php
