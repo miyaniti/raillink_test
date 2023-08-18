@@ -1,51 +1,37 @@
 <?= $this->Html->css('home.css') ?>
 <h1><?= $title ?></h1>
-<div class="top">
-  <!-- フォームの作成 -->
-  <?= $this->Form->create(null,[
-      'type' => 'post',
-      'class' => 'login',
-       'url' => ['controller' => 'Home', 'action' => 'login']
+
+<?php if (!empty($loggedInUser)): ?>
+    <h5 class="login_user">ログイン中： <?= h($loggedInUser['user_name']) ?></h5 class="login_user">
+<?php else: ?>
+    <p>Not logged in</p>
+<?php endif; ?>
+
+<?= $this->Form->create(null, [
+    'url' => ['controller' => 'Users','action' => 'logout']
     ]) 
-  ?>
-  <?= $this->Form->control( 'user_name', [
-      'type' => 'text',  
-      'label' => 'ユーザー名',  
-      'div' => false,
-      'maxlength' => '128',
-      'class'=>'login_text'
-  ]);
-  ?>
-    <?= $this->Form->control( 'pw', [
-      'type' => 'password',  
-      'label' => 'パスワード',  
-      'div' => false,
-      'maxlength' => '128',
-      'class'=>'login_text'
-    ])
-  ?>
-    <!-- コントロールを配置 -->
-    <?= $this->Form->submit('ログイン',[
-      'class' => "login_button"
-      ]) 
-    ?>
-  <!-- フォームの終了 -->
-  <?= $this->Form->end() ?>
-</div>
-  <?php foreach($threads as $thread): ?>
-    <table>
-    <?php if ($thread->user_id === NULL): ?>
-        <th class="thread"><a href="<?= $thread->getUrl() ?>"><?= $thread->thread ?></a></th> 
+ ?>
+    <!-- ボタンを生成し、クリック時に確認ダイアログを表示 -->
+    <h5><?= $this->Form->button('ログアウト', [
+        'class'=> 'logout_button',
+        'confirm' => 'ログアウトしますか？'
+        ]); ?>
+    </h5>
+    <?= $this->Form->end() ?>
+<?php foreach($threads as $thread): ?>
+<table>
+    <?php if ($thread->user_id === $users->id || $thread->user_id === NULL): ?>
+        <th class="thread"><a href="/users/index<?= $thread->getUrl() ?>"><?= $thread->thread ?></a></th> 
         <th class="datetime"><?= $thread->getdeta() ?></th>
         <td class="removebotton"><?= $this->Form->postLink('削除', 
-        ['controller' => 'Home', 'action' => 'deletes', $thread->id],
+        ['controller' => 'Users', 'action' => 'deleteThread', $thread->id],
         ['confirm' => '本当に削除しますか？']); ?>
     <?php else: ?>
         <th class="thread"><a href="<?= $thread->getUrl() ?>"><?= $thread->thread ?></a></th> 
         <th class="datetime"><?= $thread->getdeta() ?></th>
     <?php endif; ?>
-    </table>
-  <?php endforeach; ?>
+</table>
+<?php endforeach; ?>
 
  <!--
   <form method="post" name="login" class="login">
@@ -72,7 +58,7 @@
   <!-- フォームの作成 -->
   <?= $this->Form->create(null,[
       'type' => 'post',
-      'url' => ['controller' => 'Home', 'action' => 'submitForm']
+      'url' => ['controller' => 'Users', 'action' => 'usersubmitForm', $users->id]
     ]) 
   ?>
   <div class="create_thread"> 

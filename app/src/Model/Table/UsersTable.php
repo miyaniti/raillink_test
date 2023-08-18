@@ -23,9 +23,9 @@ use Cake\ORM\TableRegistry;
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class ThreadsTable extends AppTable
+class UsersTable extends AppTable
 {
-    const TABLE = "threads";
+    const TABLE = "users";
 
     const PUBLIC_FLAG = 2;
     /**
@@ -36,56 +36,34 @@ class ThreadsTable extends AppTable
     */
     public function initialize(array $config): void
     {
-        $this->setTable('threds');
-        $this->setDisplayField('tread');
+        $this->setTable('users');
+        $this->setDisplayField('user_name');
         $this->setPrimaryKey('id');
 
         parent::initialize($config);
     }
 
-    public function getList()
+    public function findByUsername($user_name)
     {
         return $this->find()
-            ->where(['flag' => self::PUBLIC_FLAG]);
+            ->where(['user_name' => $user_name]);
     }
 
-    public function getThreds($id)
+    public function getUser($username)
     {
         return $this->find()
-            ->where(['flag' => self::PUBLIC_FLAG])
-            ->where(['id' => $id]);
-    }
-
-    public function getData($id)
-    {
-        return $this->find()
-            ->where(['id' => $id])
-            ->where(['flag' => self::PUBLIC_FLAG])
+            ->select(['id'])
+            ->where(['user_name' => $username])
             ->first();
     }
-
-    public function createThreds($thread){
-        $newThread = $this->newEntity($thread);
-        $this->save($newThread);
-    }    
-    public function createThredsUser($thread, $user_id){
-        $newThread = $this->newEntity($thread);
-        $newThread->user_id = $user_id;
-        $this->save($newThread);
+    public function getlist($username)
+    {
+        return $this->find()
+            ->select(['id'])
+            ->select(['user_name'])
+            ->where(['user_name' => $username])
+            ->first();
     }
-    /*
-    public function deleteThread($id){
-        $updateThread = $this->get($id);
-        $updateThread->flag = 1;
-        $this->save($updateThread);
-    }
-    */
-    public function deleteThread($id){
-        if ($deleteThread = $this->get($id)) {
-            $this->delete($deleteThread);
-        }
-    }
-
 
     /**
     * Default validation rules.
@@ -100,6 +78,8 @@ class ThreadsTable extends AppTable
             ->allowEmptyString('id', 'create');
         return $validator;
     }
+
+    
 
     /**
     * Returns a rules checker object that will be used for validating
