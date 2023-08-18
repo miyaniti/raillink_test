@@ -23,9 +23,9 @@ use Cake\ORM\TableRegistry;
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class commentsTable extends AppTable
+class UsersTable extends AppTable
 {
-    const TABLE = "comments";
+    const TABLE = "users";
 
     const PUBLIC_FLAG = 2;
     /**
@@ -36,63 +36,33 @@ class commentsTable extends AppTable
     */
     public function initialize(array $config): void
     {
-        $this->setTable('comments');
-        $this->setDisplayField('comment');
+        $this->setTable('users');
+        $this->setDisplayField('user_name');
         $this->setPrimaryKey('id');
 
         parent::initialize($config);
     }
 
-    public function getComment($id)
+    public function findByUsername($user_name)
     {
         return $this->find()
-            ->where(['thread_id' => $id])
-            ->where(['flag' => self::PUBLIC_FLAG]);
+            ->where(['user_name' => $user_name]);
     }
 
-    public function getData($id)
+    public function getUser($username)
     {
         return $this->find()
-            ->where(['id' => $id])
-            ->where(['flag' => self::PUBLIC_FLAG])
+            ->select(['id'])
+            ->where(['user_name' => $username])
             ->first();
     }
-    /*
-    public function deleteComment($id)
+    public function getlist($username)
     {
-        $updateComment = $this->get($id);
-        $updateComment->flag = 1;
-        $this->save($updateComment);
-    }
-    */
-    public function deleteComment($thread_id)
-    {
-        if ($this->get($thread_id)) {
-            $deleteComment = $this->get($thread_id);
-            $this->delete($deleteComment);
-        }
-    }
-
-    public function deleteComments($thread_id)
-    {
-        $this->deleteAll(['thread_id IN' => $thread_id]);
-        /*
-        $deleteComment = $this->find('all')
-            ->where(['thread_id' => $thread_id])
-            ->toList();
-        $this->deleteAll($deleteComment);
-        */
-    }
-
-    public function createComment($comment){
-        //dd($comment["user_name"]);
-        $newComment = $this->newEntity();
-        $newComment->thread_id = $comment["thread_id"];
-        $newComment->user_name = $comment["user_name"];
-        $newComment->comment = $comment["comment"];
-        //$newComment->user_name = $this->newEntity($comment["user_name"]);
-        //$newComment->comment = $this->newEntity($comment["comment"]);
-        $this->save($newComment);
+        return $this->find()
+            ->select(['id'])
+            ->select(['user_name'])
+            ->where(['user_name' => $username])
+            ->first();
     }
 
     /**
@@ -108,6 +78,8 @@ class commentsTable extends AppTable
             ->allowEmptyString('id', 'create');
         return $validator;
     }
+
+    
 
     /**
     * Returns a rules checker object that will be used for validating

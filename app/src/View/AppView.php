@@ -37,4 +37,9 @@ class AppView extends View
     public function initialize()
     {
     }
+
+    public function enFormat($num)
+    {
+        return '¥' . number_format($num);
+    }
 }

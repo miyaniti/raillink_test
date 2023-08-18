@@ -67,6 +67,11 @@ class ThreadsTable extends AppTable
     public function createThreds($thread){
         $newThread = $this->newEntity($thread);
         $this->save($newThread);
+    }    
+    public function createThredsUser($thread, $user_id){
+        $newThread = $this->newEntity($thread);
+        $newThread->user_id = $user_id;
+        $this->save($newThread);
     }
     /*
     public function deleteThread($id){
@@ -76,8 +81,7 @@ class ThreadsTable extends AppTable
     }
     */
     public function deleteThread($id){
-        if ($this->get($id)) {
-            $deleteThread = $this->get($id);
+        if ($deleteThread = $this->get($id)) {
             $this->delete($deleteThread);
         }
     }

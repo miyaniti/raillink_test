@@ -2,15 +2,19 @@
 <?= $this->Html->script('ajax_example.js') ?>
 
 <?= $this->Html->css('home.css') ?>
-<h1><a href="/">トップへ</a>
+<h1><a href="users/index">トップへ</a>
 
 
 
 <?php foreach($threads as $thread): ?>
 <h2><?= $thread->thread ?></a></h2>
-<?php endforeach; 
+<?php endforeach;?>
 
-?>
+<?php if (!empty($user_name)): ?>
+    <h5 class="login_user">ログイン中： <?= $user_name ?></h5 class="login_user">
+<?php else: ?>
+    <p>Not logged in</p>
+<?php endif; ?>
 
 <?php foreach($comments as $comment): ?>
 <h3 class="user_name"><?= $comment->user_name ?></h3>

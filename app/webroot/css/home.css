@@ -243,11 +243,27 @@ hr {
 /* top画面の調整 */
 th,td {
     border: solid 1px;              /* 枠線指定 */
-    
+}
+table {
+    border-collapse: collapse;
+    display: inline-block;
+    margin: -5px 80px; /* 余白を削除 */
+}
+.thread_none{
+    width: 60%;
+    font-size: 200%;       /* 文字サイズ指定 */
+}
+.datetime_none{
+    width: 40%;
+    font-size: 100%;       /* 文字サイズ指定 */
 }
 .thread{
-    width: 90%;
+    width: 60%;
     font-size: 200%;       /* 文字サイズ指定 */
+}
+.datetime{
+    width: 30%;
+    font-size: 100%;       /* 文字サイズ指定 */
 }
 .create_thread{
     max-width: 300px;
@@ -261,11 +277,64 @@ th,td {
     line-height: 5;
     text-align: center;
 }
-table {
-    border-collapse: collapse;
-    display: inline-block;
-    margin: -5px 80px; /* 余白を削除 */
+.login{
+    display: flex;
+    position: fixed; 
+    margin-top: -50px;
+    grid-gap: 15px;
+    float: right;
+    position: relative;
+    padding: 20px; /* 余白を追加 */
+    
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-gap: 10px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
+.login_text{
+    max-width: 200px;
+    
+}
+.login_button{
+    margin: 0px 10px; /* 余白を削除 */
+    color: #fff;
+    background-color: #eb6100;
+    border-radius: 100vh;
+    padding: 0px 20px;
+    white-space: nowrap;
+    width: 130px; /* 幅を調整 */
+    height: 40px; /* 高さを調整 */
+    
+}
+
+.login_user{
+    float: right ;
+    margin-top: -30px;
+    margin-right: 300px;
+}
+
+/* ここから下がボタンのCSS　*/
+.logout_button {
+    float: right ;
+    margin-top: -50px;
+    margin-right:-350px ;
+    font-weight: bold;
+    border-radius: 0.3rem;
+    background-color: #ffffff;
+    border-image-source: repeating-linear-gradient(45deg, #ff4242 0, #ff4242 6px, rgba(0, 0, 0, 0) 6px, rgba(0, 0, 0, 0) 8px);
+    border-image-slice: 4;
+    border-width: 4px;
+    border-image-repeat: round;
+    border-style: solid;
+    color: #e66363;
+}
+.logout_button:hover {
+    border: 4px solid #ffffff;
+    color: #ffffff;
+}
+
+
 
 /* スレッド画面の調整 */
 .comment {
@@ -281,10 +350,31 @@ table {
     margin: 10px 20px; /* 余白を削除 */
     font-size: 120%;
 }
+.deletecomment{
+    padding-left: 30px;
+}
 .create_user{
     width: 200px;
 }
 .create_comment{
     width: 300px;
     top: 300px;
+}
+/*いいねボタン*/
+.border_btn08 {
+margin-top: 30px;
+display: inline-block;
+padding: 5px 10px;
+text-decoration: none;
+background-color: #ff274b;
+color: #FFF;
+border-bottom: solid 4px #627295;
+border-radius: 10px;
+}
+.border_btn08:active {
+-webkit-transform: translateY(4px);
+transform: translateY(4px);
+border-bottom: none;
+background-color: #ff274b; /* 押したときも色を変えない */
+outline: none; /* フォーカス時のアウトラインを削除 */
 }
