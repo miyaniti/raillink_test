@@ -89,12 +89,14 @@ class commentsTable extends AppTable
         $newComment = $this->newEntity();
         $newComment->thread_id = $comment["thread_id"];
         $newComment->user_name = $comment["user_name"];
+        if($comment["user_id"]){
+            $newComment->user_id = $comment["user_id"];
+        }
         $newComment->comment = $comment["comment"];
         //$newComment->user_name = $this->newEntity($comment["user_name"]);
         //$newComment->comment = $this->newEntity($comment["comment"]);
         $this->save($newComment);
     }
-
     /**
     * Default validation rules.
     *

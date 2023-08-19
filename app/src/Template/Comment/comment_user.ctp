@@ -24,11 +24,13 @@
     <p><?= $this->Form->button('いいね', ['class' => 'border_btn08','type' => 'button', 'data-id' => $comment->id]
     )?></p>
     <!--<p class="border_btn08"> <span>いいね</span></p> !-->
-    <p class="deletecomment">
-    <?= $this->Form->postLink('削除', 
-    ['controller' => 'Comment','action' => 'deleteComment', $comment->id, $comment->thread_id],
-    ['confirm' => '本当に削除しますか？']); ?>
-    </p>
+    <?php if ($comment->user_id === $user_id ): ?>
+        <p class="deletecomment">
+        <?= $this->Form->postLink('削除', 
+        ['controller' => 'Comment','action' => 'deleteCommentUser', $comment->id, $comment->thread_id],
+        ['confirm' => '本当に削除しますか？']); ?>
+        </p>
+    <?php endif; ?>
 </div>
 <?php endforeach; 
 ?>
@@ -47,20 +49,9 @@
   <!-- フォームの作成 -->
     <?= $this->Form->create(null,[
         'type' => 'post',
-        'url' => ['controller' => 'Comment', 'action' => 'createComment']
+        'url' => ['controller' => 'Comment', 'action' => 'createCommentUser']
         ]) 
     ?> 
-
-    <div class="create_user">
-        <?= $this->Form->control( 'user_name', [
-        'type' => 'text',  
-        'label' => 'ユーザー名',  
-        'div' => false,
-        'maxlength' => '100',
-        'class'=>'comment'
-        ])
-        ?>
-    </div>
     
     <div class="create_comment">
         <?= $this->Form->control( 'comment', [
@@ -76,6 +67,16 @@
     <?= $this->Form->control( 'thread_id', [
         'type' => 'hidden',  
         'value' => $thread_id,
+        ])
+    ?>
+    <?= $this->Form->control( 'user_name', [
+        'type' => 'hidden',  
+        'value' => $user_name,
+        ])
+    ?>
+    <?= $this->Form->control( 'user_id', [
+        'type' => 'hidden',  
+        'value' => $user_id,
         ])
     ?>
 

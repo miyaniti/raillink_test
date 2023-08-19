@@ -96,6 +96,24 @@ class CommentController extends AppController
         // return $this->redirect('/thread/{$comment["thread_id"]}');
     }
 
+    public function createCommentUser() {
+        // POSTデータを取得
+        $comment = $this->request->getData();
+        // 処理結果をビューに渡す
+        $this->CommentTable->createComment($comment);
+
+        //$this->set('data', $this->request->getData());
+        return $this->redirect("/users/index/comments/{$comment['thread_id']}");
+        //$routes->connect('/comments/:id', ['controller' => 'Comment', 'action' => 'comment'], ['pass' => ['id']]);
+        // return $this->redirect('/thread/{$comment["thread_id"]}');
+    }
+    public function deleteCommentUser($id, $thread_id)
+    {
+        // 処理結果をビューに渡す
+        $this->CommentTable->deleteComment($id);
+        return $this->redirect("/users/index/comments/$thread_id");
+    }
+
     public function goodindex($id){
         /*
         $count = $this->Counts->find()->firstOrFail();

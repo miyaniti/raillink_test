@@ -34,16 +34,13 @@
 </div>
   <?php foreach($threads as $thread): ?>
     <table>
-    <?php if ($thread->user_id === NULL): ?>
-        <th class="thread"><a href="<?= $thread->getUrl() ?>"><?= $thread->thread ?></a></th> 
-        <th class="datetime"><?= $thread->getdeta() ?></th>
+      <th class="thread"><a href="<?= $thread->getUrl() ?>"><?= $thread->thread ?></a></th> 
+      <th class="datetime"><?= $thread->getdeta() ?></th>
+      <?php if ($thread->user_id === NULL): ?>
         <td class="removebotton"><?= $this->Form->postLink('削除', 
         ['controller' => 'Home', 'action' => 'deletes', $thread->id],
         ['confirm' => '本当に削除しますか？']); ?>
-    <?php else: ?>
-        <th class="thread"><a href="<?= $thread->getUrl() ?>"><?= $thread->thread ?></a></th> 
-        <th class="datetime"><?= $thread->getdeta() ?></th>
-    <?php endif; ?>
+      <?php endif; ?>
     </table>
   <?php endforeach; ?>
 

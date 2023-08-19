@@ -20,15 +20,12 @@
     <?= $this->Form->end() ?>
 <?php foreach($threads as $thread): ?>
 <table>
-    <?php if ($thread->user_id === $users->id || $thread->user_id === NULL): ?>
-        <th class="thread"><a href="/users/index<?= $thread->getUrl() ?>"><?= $thread->thread ?></a></th> 
-        <th class="datetime"><?= $thread->getdeta() ?></th>
+    <th class="thread"><a href="/users/index<?= $thread->getUrl() ?>"><?= $thread->thread ?></a></th> 
+    <th class="datetime"><?= $thread->getdeta() ?></th>
+    <?php if ($thread->user_id === $users->id ): ?>
         <td class="removebotton"><?= $this->Form->postLink('削除', 
         ['controller' => 'Users', 'action' => 'deleteThread', $thread->id],
         ['confirm' => '本当に削除しますか？']); ?>
-    <?php else: ?>
-        <th class="thread"><a href="<?= $thread->getUrl() ?>"><?= $thread->thread ?></a></th> 
-        <th class="datetime"><?= $thread->getdeta() ?></th>
     <?php endif; ?>
 </table>
 <?php endforeach; ?>
