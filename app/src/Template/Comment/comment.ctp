@@ -20,11 +20,13 @@
     <p><?= $this->Form->button('いいね', ['class' => 'border_btn08','type' => 'button', 'data-id' => $comment->id]
     )?></p>
     <!--<p class="border_btn08"> <span>いいね</span></p> !-->
-    <p class="deletecomment">
-    <?= $this->Form->postLink('削除', 
-    ['controller' => 'Comment','action' => 'deleteComment', $comment->id, $comment->thread_id],
-    ['confirm' => '本当に削除しますか？']); ?>
-    </p>
+    <?php if ($comment->user_id === NULL ): ?>
+        <p class="deletecomment">
+        <?= $this->Form->postLink('削除', 
+        ['controller' => 'Comment','action' => 'deleteComment', $comment->id, $comment->thread_id],
+        ['confirm' => '本当に削除しますか？']); ?>
+        </p>
+    <?php endif; ?>
 </div>
 <?php endforeach; 
 ?>
