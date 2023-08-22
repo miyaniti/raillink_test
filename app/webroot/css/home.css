@@ -307,13 +307,11 @@ table {
     height: 40px; /* 高さを調整 */
     
 }
-
 .login_user{
     float: right ;
     margin-top: -30px;
     margin-right: 300px;
 }
-
 /* ここから下がボタンのCSS　*/
 .logout_button {
     float: right ;
@@ -333,7 +331,37 @@ table {
     border: 4px solid #ffffff;
     color: #ffffff;
 }
-
+/*天気*/
+.weather {
+    margin-top:50px;
+}
+.weather-container {
+    display: flex;
+    margin-left: 40px;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    background-color: #83c8d1;
+}
+.weather-icon {
+    font-size: 30px;
+    margin-right: 10px;
+}
+.weather-info {
+    display: flex;
+    flex-direction: column;
+}
+.temperature {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.description {
+    font-size: 14px;
+}
 
 
 /* スレッド画面の調整 */

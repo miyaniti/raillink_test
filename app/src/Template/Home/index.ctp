@@ -90,3 +90,16 @@
   <?= $this->Form->end() ?>
 
 </html>
+
+<!-- api -->
+<div class="weather">
+  <h2>天気情報</h2>
+  <div class="weather-container">
+    <p class="temperature"><?= $PlaceDescription ?>:</p>
+    <img class="weather-icon" src="https://openweathermap.org/img/wn/<?= $weather_icon ?>@2x.png" alt="Unknown"> </img>
+    <div class="weather-info">
+      <p class="temperature">天気：<?= $weatherDescription ?></p>
+      <p class="temperature">気温： <?= $temperature ?>°C</p>
+    </div>
+  </div>
+</div>
