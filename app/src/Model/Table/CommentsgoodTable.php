@@ -23,11 +23,9 @@ use Cake\ORM\TableRegistry;
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class ThreadsTable extends AppTable
+class CommentsgoodTable extends AppTable
 {
-    const TABLE = "threads";
-
-    const PUBLIC_FLAG = 2;
+    const TABLE = "comments_good";
     /**
     * Initialize method
     *
@@ -36,55 +34,64 @@ class ThreadsTable extends AppTable
     */
     public function initialize(array $config): void
     {
-        $this->setTable('threds');
-        $this->setDisplayField('tread');
+        $this->setTable('comments_good');
+        $this->setDisplayField('comment_id');
         $this->setPrimaryKey('id');
 
         parent::initialize($config);
     }
-
-    public function getList()
-    {
-        return $this->find()
-            ->where(['flag' => self::PUBLIC_FLAG]);
-    }
-
-    public function getThreds($id)
-    {
-        return $this->find()
-            ->where(['flag' => self::PUBLIC_FLAG])
-            ->where(['id' => $id]);
-    }
-
-    public function getData($id)
-    {
-        return $this->find()
-            ->where(['id' => $id])
-            ->where(['flag' => self::PUBLIC_FLAG])
-            ->first();
-    }
-
-    public function createThreds($thread){
-        $newThread = $this->newEntity($thread);
-        $this->save($newThread);
-    }    
-    public function createThredsUser($thread, $user_id){
-        $newThread = $this->newEntity($thread);
-        $newThread->user_id = $user_id;
-        $this->save($newThread);
-    }
     /*
-    public function deleteThread($id){
-        $updateThread = $this->get($id);
-        $updateThread->flag = 1;
-        $this->save($updateThread);
-    }
-    */
-    public function deleteThread($id){
-        if ($deleteThread = $this->get($id)) {
-            $this->delete($deleteThread);
+    public function deleteComments($thread_id)
+    {
+        $this->deleteAll(['thread_id IN' => $thread_id]);
+        /*
+        $deleteComment = $this->find('all')
+            ->where(['thread_id' => $thread_id])
+            ->toList();
+        $this->deleteAll($deleteComment);
+        */
+    //}
+    
+
+    public function commentgood($comment_id, $thread_id, $user_id)
+    {
+        //dd($comment["user_name"]);
+        //dd($comment_id);
+
+        $getgood = $this->exists([
+            'comment_id' => $comment_id,
+            'user_id' => $user_id,
+            'thread_id' => $thread_id
+        ]);
+        if($getgood){
+            $this->deleteAll([
+                'comment_id' => $comment_id,
+                'user_id' => $user_id,
+                'thread_id' => $thread_id
+            ]);
+        }
+        else{
+            $newCommentgood = $this->newEntity();
+            $newCommentgood->comment_id = $comment_id;
+            $newCommentgood->user_id = $user_id;
+            $newCommentgood->thread_id = $thread_id;
+            //$newComment->user_name = $comment["user_name"];
+            //$newComment->user_name = $this->newEntity($comment["user_name"]);
+            //$newComment->comment = $this->newEntity($comment["comment"]);
+            $this->save($newCommentgood);
         }
     }
+    public function deleteCommentgood($thread_id)
+    {
+        $this->deleteAll(['thread_id IN' => $thread_id]);
+        /*
+        $deleteComment = $this->find('all')
+            ->where(['thread_id' => $thread_id])
+            ->toList();
+        $this->deleteAll($deleteComment);
+        */
+    }
+
     /**
     * Default validation rules.
     *

@@ -37,6 +37,7 @@ class UsersController extends AppController
         $this->ThreadsTable = TableRegistry::getTableLocator()->get("threads");
         $this->CommentTable = TableRegistry::getTableLocator()->get("comments");
         $this->UsersTable = TableRegistry::getTableLocator()->get("users");
+        $this->CommentsgoodTable = TableRegistry::getTableLocator()->get("commentsgood");//アンダースコア(_)いらない
         
     }
 
@@ -90,9 +91,11 @@ class UsersController extends AppController
     }
 
     public function getlist(){
-        $userObject = json_decode(json_encode($this->Auth->user()));
-        //dd($this->UsersTable->getlist($userObject->user_name));
-        return $this->UsersTable->getlist($userObject->user_name);
+        if($this->Auth->user()){
+            $userObject = json_decode(json_encode($this->Auth->user()));
+            //dd($this->UsersTable->getlist($userObject->user_name));
+            return $this->UsersTable->getlist($userObject->user_name);
+        }
     }
 
     public function logout()
@@ -120,11 +123,13 @@ class UsersController extends AppController
     }
 
     
-    public function deleteThread($id)
+    public function deletes($id)
     {
         // 処理結果をビューに渡す
         $this->ThreadsTable->deleteThread($id);
-        
+        $this->CommentTable->deleteComments($id);
+        $this->CommentsgoodTable->deleteCommentgood($id);
+
         return $this->redirect(['controller' => 'Users', 'action' => 'index']);
     }
     

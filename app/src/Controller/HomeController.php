@@ -11,6 +11,7 @@ use Cake\Controller\Controller;
 use Cake\Utility\Security;
 use Cake\Routing\Router;
 use Cake\Http\Client;
+use Cake\Cache\Cache;
 /**
  * Static content controller
  *
@@ -20,6 +21,7 @@ use Cake\Http\Client;
  */
 class HomeController extends AppController
 {
+    public const CNT = 5; // 天気取得 
     //public $components = ['Auth'];
     /**
      * Initialization hook method.
@@ -37,7 +39,7 @@ class HomeController extends AppController
         $this->ThreadsTable = TableRegistry::getTableLocator()->get("threads");
         $this->CommentTable = TableRegistry::getTableLocator()->get("comments");
         $this->UsersTable = TableRegistry::getTableLocator()->get("users");
-
+        $this->CommentsgoodTable = TableRegistry::getTableLocator()->get("commentsgood");//アンダースコア(_)いらない
         /*
         $this->loadComponent('Auth', [
             'authenticate' => [
@@ -58,28 +60,55 @@ class HomeController extends AppController
             'unauthorizedRedirect' => $this->referer()
         ]);
         */
-        
-        
     }
 
     public function index()
     {
+        $cacheKey = 'posts_data';
+
+        // キャッシュからデータを読み込む
+        $cachedData = Cache::read($cacheKey);
+        if (!$cachedData) {
+            // キャッシュが存在しない場合、データベースから取得
+            $data = $this->ThreadsTable->find()->toArray();
+            //dd($data);
+            // データをキャッシュに書き込む
+            Cache::write($cacheKey, $data, 'default');
+            
+        }else {
+            // キャッシュにデータが存在する場合の処理
+            // キャッシュからデータを使用
+            $data = $cachedData;
+        }
+        //dd($data);
+        // キャッシュされたデータまたはデータベースから取得したデータを使用
+        //$this->set('posts', $posts);
+        
         $title = "掲示板";
-        $this->set('threads',$this->ThreadsTable->getList());
+        $this->set('threads',$data);
         $this->set('title',$title);
+
         /*天気情報取得*/
-        $http = new Client();
+        //$http = new Client();
         $apiKey = 'd8c4abf2ef8ec7f50742ada4ead72ad6';
         $city = 'Tokyo';
-        $response = $http->get("http://api.openweathermap.org/data/2.5/weather?q=$city&appid=$apiKey");
-        $data = $response->getJson();
-        $weather_icon = $data['weather'][0]['icon'];
-        $PlaceDescription = $this->convertToJapanesePlace($data['name']);
-        $weatherDescription = $this->convertToJapaneseWeather($data['weather'][0]['id']);
-        $temperature = $data['main']['temp'] - 273.15;
-
-        $this->set(compact('weather_icon','PlaceDescription','weatherDescription', 'temperature'));
+        $apiUrl = "http://api.openweathermap.org/data/2.5/forecast?q=$city&appid=$apiKey&cnt=". self::CNT; // cnt分データを取得
+        $response = file_get_contents($apiUrl);
+        $weathers = json_decode($response, true);
+        //dd($weathers['list'][0]);
+        $PlaceDescription = $this->convertToJapanesePlace($city);
+        for($i = 0; $i < HomeController::CNT ;$i++){
+            $weathers['list'][$i]['dt'] = date('m/d　H時', $weathers['list'][$i]['dt']);
+            $weathers['list'][$i]['weather'][0]['id'] = $this->convertToJapaneseWeather($weathers['list'][$i]['weather'][0]['id']);
+        }
+        //$weather_icon = $data['weather'][0]['icon'];
+        //$temperature = $data['main']['temp'] - 273.15;
+        //dd($weathers['list']);
+        //dd(date('m/d', $weathers['list'][0]['dt']));
+        //$this->set(compact('weather_icon','PlaceDescription','weatherDescription', 'temperature'));
         
+        $this->set('PlaceDescription', $PlaceDescription);
+        $this->set('weathers',$weathers['list']);
     }
 
     function convertToJapanesePlace($place) {
@@ -185,6 +214,10 @@ class HomeController extends AppController
         // 処理結果をビューに渡す
         $this->ThreadsTable->deleteThread($id);
         $this->CommentTable->deleteComments($id);
+        $this->CommentsgoodTable->deleteCommentgood($id);
+        $cacheKey = 'posts_data';
+        Cache::delete($cacheKey, 'default'); // キャッシュの削除
+
         return $this->redirect(['controller' => 'Home', 'action' => 'index']);
     }
 
@@ -245,7 +278,9 @@ class HomeController extends AppController
         
         // 処理結果をビューに渡す
         $this->ThreadsTable->createThreds($thread);
-        
+
+        $cacheKey = 'posts_data';
+        Cache::delete($cacheKey, 'default'); // キャッシュの削除
         return $this->redirect(['controller' => 'Home', 'action' => 'index']);
     }
     

@@ -90,16 +90,16 @@
   <?= $this->Form->end() ?>
 
 </html>
-
-<!-- api -->
-<div class="weather">
-  <h2>天気情報</h2>
-  <div class="weather-container">
-    <p class="temperature"><?= $PlaceDescription ?>:</p>
-    <img class="weather-icon" src="https://openweathermap.org/img/wn/<?= $weather_icon ?>@2x.png" alt="Unknown"> </img>
-    <div class="weather-info">
-      <p class="temperature">天気：<?= $weatherDescription ?></p>
-      <p class="temperature">気温： <?= $temperature ?>°C</p>
-    </div>
-  </div>
-</div>
+<h2 class="weather">天気情報</h2>
+<?php foreach($weathers as $weather): ?>
+  <table class="weather-table">
+    <tr>
+          <!-- PHPコードで天気情報をループ表示 -->
+      <th><?= $PlaceDescription ?></th>
+      <th><?= $weather["dt"]?></th>
+      <th><img class="weather-icon" src="https://openweathermap.org/img/wn/<?= $weather["weather"][0]["icon"] ?>@2x.png" alt="Unknown"> </img></th>
+      <th>天気：<?= $weather["weather"][0]["id"] ?></th>
+      <th>気温：<?= $weather['main']['temp'] - 273.15 ?>°C</th>
+    </tr>
+  </table>
+<?php endforeach; ?>

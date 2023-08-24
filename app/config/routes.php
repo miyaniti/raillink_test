@@ -72,11 +72,13 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect('/users/login', ['controller' => 'Users', 'action' => 'login']);
     $routes->connect('/users/index/comments/:id', ['controller' => 'Comment', 'action' => 'commentUser'], ['pass' => ['id']]);
     $routes->connect('/users/thread/create/', ['controller' => 'Users', 'action' => 'usersubmitForm']);
+    $routes->connect('/users/index/', ['controller' => 'Users', 'action' => 'deletes']);
 
 
     // config/routes.php
     //$routes->connect('/comments/comment/:id', ['controller' => 'Your', 'action' => 'ajaxExample']);
     $routes->connect('/comments/comment/:comment_id', ['controller' => 'Comment', 'action' => 'goodindex'], ['pass' => ['comment_id']]);
+    $routes->connect('/comments/commentgood/:comment_id', ['controller' => 'Comment', 'action' => 'goodindexuser'], ['pass' => ['comment_id']]);
     /**
      * ...and connect the rest of 'Pages' controller's URLs.
      */
