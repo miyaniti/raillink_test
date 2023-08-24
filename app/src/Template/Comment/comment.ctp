@@ -17,9 +17,8 @@
 <div class="comment">
     <p class="comments"><?= $comment->comment ?> </p>
     <p class="comments" id="comment<?=$comment->id?>"><?= $comment->good_count ?></p>
-    <p><?= $this->Form->button('いいね', ['class' => 'border_btn08','type' => 'button', 'data-id' => $comment->id]
-    )?></p>
-    <!--<p class="border_btn08"> <span>いいね</span></p> !-->
+    <!--<p><?= $this->Form->button('いいね', ['class' => 'border_btn','type' => 'button', 'data-id' => $comment->id])//一応残しておく?></p>!-->
+    <p class="border_btn"> いいね </p> <p>(ログインするとカウントされるようになります)</p>
     <?php if ($comment->user_id === NULL ): ?>
         <p class="deletecomment">
         <?= $this->Form->postLink('削除', 

@@ -332,36 +332,34 @@ table {
     color: #ffffff;
 }
 /*天気*/
-.weather {
+.weather{
     margin-top:50px;
 }
-.weather-container {
-    display: flex;
-    margin-left: 40px;
-    align-items: center;
+/* styles.css */
+.weather-table {
+    width: 100%;
+    border-collapse: collapse; /* 枠線を重ねることで余白を削減 */
+}
+
+.weather-table th, .weather-table td {
     padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
-    background-color: #83c8d1;
+    text-align: center;
 }
-.weather-icon {
-    font-size: 30px;
-    margin-right: 10px;
-}
-.weather-info {
-    display: flex;
-    flex-direction: column;
-}
-.temperature {
-    font-size: 18px;
+
+.weather-date {
     font-weight: bold;
-    margin-bottom: 5px;
+    color: #007bff;
 }
-.description {
-    font-size: 14px;
+
+.weather-data-cell {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
 }
+
+
+
 
 
 /* スレッド画面の調整 */
@@ -389,7 +387,7 @@ table {
     top: 300px;
 }
 /*いいねボタン*/
-.border_btn08 {
+.border_btn {
 margin-top: 30px;
 display: inline-block;
 padding: 5px 10px;
@@ -399,7 +397,7 @@ color: #FFF;
 border-bottom: solid 4px #627295;
 border-radius: 10px;
 }
-.border_btn08:active {
+.border_btn:active {
 -webkit-transform: translateY(4px);
 transform: translateY(4px);
 border-bottom: none;

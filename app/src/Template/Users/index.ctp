@@ -24,7 +24,7 @@
     <th class="datetime"><?= $thread->getdeta() ?></th>
     <?php if ($thread->user_id === $users->id ): ?>
         <td class="removebotton"><?= $this->Form->postLink('削除', 
-        ['controller' => 'Users', 'action' => 'deleteThread', $thread->id],
+        ['controller' => 'Users', 'action' => 'deletes', $thread->id],
         ['confirm' => '本当に削除しますか？']); ?>
     <?php endif; ?>
 </table>

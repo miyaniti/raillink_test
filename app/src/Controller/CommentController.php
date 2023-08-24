@@ -9,6 +9,7 @@ use Cake\ORM\TableRegistry;
 use App\Controller\AppController;
 use Cake\Controller\Controller;
 use App\Controller\UsersController;
+use Cake\Datasource\ConnectionManager;
 
 /**
  * Static content controller
@@ -34,6 +35,8 @@ class CommentController extends AppController
 
         $this->ThreadsTable = TableRegistry::getTableLocator()->get("threads");
         $this->CommentTable = TableRegistry::getTableLocator()->get("comments");
+        $this->CommentsgoodTable = TableRegistry::getTableLocator()->get("commentsgood");//アンダースコア(_)いらない
+        
     }
 
     public function comment($id)
@@ -111,28 +114,54 @@ class CommentController extends AppController
     {
         // 処理結果をビューに渡す
         $this->CommentTable->deleteComment($id);
+        $this->CommentsgoodTable->deleteCommentgood($id);
         return $this->redirect("/users/index/comments/$thread_id");
     }
 
+    public function goodindexuser($comment_id){
+        $usersController = new UsersController();
+        
+        if($usersController->getlist()){
+            $user = json_decode($usersController->getlist());
+            $comment = json_decode($this->CommentTable->getData($comment_id));
+            $this->CommentsgoodTable->commentgood($comment->id, $comment->thread_id, $user->id);
+        }
+        else{
+            dd("no user");
+        }
+        $this->response->withType('text/plain');
+
+        $connection = ConnectionManager::get('default');
+        $query = $connection->newQuery();
+        $totalAmount = $query
+            ->select(['totalcomment_id' => $query->func()->count('comment_id')])
+            ->from('comments_good')
+            ->where(['comment_id' => $comment_id])
+            ->execute()
+            ->fetch('assoc')['totalcomment_id'];
+
+        $commentcount = $this->CommentTable->get($comment_id);
+        $commentcount->good_count = $totalAmount;
+        $this->CommentTable->save($commentcount);
+        return $this->response->withStringBody($totalAmount);
+    }
+
+/*　ボタンを押したら無限にカウント　
     public function goodindex($id){
-        /*
-        $count = $this->Counts->find()->firstOrFail();
-        $count->count++;
-        $this->Counts->save($count);
-        */
+
         $commentcount = $this->CommentTable->get($id);
         $commentcount->good_count++;
         $this->CommentTable->save($commentcount);
-
         $this->response->withType('text/plain');
-        //$this->response->body(json_encode(['count' => $commentcount->good_count]));
         return $this->response->withStringBody($commentcount->good_count);
-        /*
+        //$this->response->body(json_encode(['count' => $commentcount->good_count]));
+        
         $count = $this->Counts->find()->firstOrFail();
         $count->count++;
         $this->Counts->save($count);
         echo $count->count;
-        */
+        
     }
+*/
     
 }
