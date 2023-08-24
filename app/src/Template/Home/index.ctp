@@ -95,11 +95,11 @@
   <table class="weather-table">
     <tr>
           <!-- PHPコードで天気情報をループ表示 -->
-      <th><?= $PlaceDescription ?></th>
-      <th><?= $weather["dt"]?></th>
-      <th><img class="weather-icon" src="https://openweathermap.org/img/wn/<?= $weather["weather"][0]["icon"] ?>@2x.png" alt="Unknown"> </img></th>
-      <th>天気：<?= $weather["weather"][0]["id"] ?></th>
-      <th>気温：<?= $weather['main']['temp'] - 273.15 ?>°C</th>
+      <th><?= $weather["place"] ?></th>
+      <th><?= $weather["date"] ?></th>
+      <th><img class="weather-icon" src="<?= $weather['img'] ?>" alt="Unknown"> </img></th>
+      <th>天気：<?= $weather['weather'] ?></th>
+      <th>気温：<?= $weather['temp'] ?></th>
     </tr>
   </table>
 <?php endforeach; ?>
