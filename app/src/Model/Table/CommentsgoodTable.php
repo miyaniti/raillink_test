@@ -81,7 +81,11 @@ class CommentsgoodTable extends AppTable
             $this->save($newCommentgood);
         }
     }
-    public function deleteCommentgood($thread_id)
+    public function deleteCommentgood($comment_id)
+    {
+        $this->deleteAll(['comment_id IN' => $comment_id]);
+    }
+    public function deleteCommentgoods($thread_id)
     {
         $this->deleteAll(['thread_id IN' => $thread_id]);
         /*

@@ -42,4 +42,37 @@ class AppView extends View
     {
         return '¥' . number_format($num);
     }
+
+    public function isAdminUser($users)
+    {
+        return isset($users) && $users->authority === 1;
+    }
+
+    public function publicDeleteCommentButton($comment,$users)
+    {
+        if(isset($users)){
+            if($comment->user_id === $users->id || $this->isAdminUser($users)){
+                return true;
+            }
+        }else{
+            if($comment->user_id === NULL){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public function publicDeleteButton($thread,$users)
+    {
+        if(isset($users)){
+            if($thread->user_id === $users->id || $this->isAdminUser($users)){
+                return true;
+            }
+        }else{
+            if($thread->user_id === NULL){
+                return true;
+            }
+        }
+        return false;
+    }
 }

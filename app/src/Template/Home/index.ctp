@@ -1,48 +1,16 @@
 <?= $this->Html->css('home.css') ?>
 <h1><?= $title ?></h1>
-<div class="top">
-  <!-- フォームの作成 -->
-  <?= $this->Form->create(null,[
-      'type' => 'post',
-      'class' => 'login',
-       'url' => ['controller' => 'Home', 'action' => 'login']
-    ]) 
-  ?>
-  <?= $this->Form->control( 'user_name', [
-      'type' => 'text',  
-      'label' => 'ユーザー名',  
-      'div' => false,
-      'maxlength' => '128',
-      'class'=>'login_text'
-  ]);
-  ?>
-    <?= $this->Form->control( 'pw', [
-      'type' => 'password',  
-      'label' => 'パスワード',  
-      'div' => false,
-      'maxlength' => '128',
-      'class'=>'login_text'
-    ])
-  ?>
-    <!-- コントロールを配置 -->
-    <?= $this->Form->submit('ログイン',[
-      'class' => "login_button"
-      ]) 
-    ?>
-  <!-- フォームの終了 -->
-  <?= $this->Form->end() ?>
-</div>
-  <?php foreach($threads as $thread): ?>
-    <table>
-      <th class="thread"><a href="<?= $thread->getUrl() ?>"><?= $thread->thread ?></a></th> 
-      <th class="datetime"><?= $thread->getdeta() ?></th>
-      <?php if ($thread->user_id === NULL): ?>
-        <td class="removebotton"><?= $this->Form->postLink('削除', 
-        ['controller' => 'Home', 'action' => 'deletes', $thread->id],
-        ['confirm' => '本当に削除しますか？']); ?>
+<?php foreach($threads as $thread): ?>
+  <table>
+    <th class="thread"><a href="<?= $thread->getUrl() ?>"><?= $thread->thread ?></a></th> 
+    <th class="datetime"><?= $thread->getdeta() ?></th>
+      <?php if ($this->publicDeleteButton($thread,$users)): ?>
+          <td class="removebotton"><?= $this->Form->postLink('削除', 
+          ['controller' => 'Home', 'action' => 'deletes', $thread->id],
+          ['confirm' => '本当に削除しますか？']); ?>
       <?php endif; ?>
-    </table>
-  <?php endforeach; ?>
+  </table>
+<?php endforeach; ?>
 
  <!--
   <form method="post" name="login" class="login">
@@ -66,28 +34,34 @@
     </form>
 */ ?>
 
-  <!-- フォームの作成 -->
-  <?= $this->Form->create(null,[
-      'type' => 'post',
-      'url' => ['controller' => 'Home', 'action' => 'submitForm']
-    ]) 
-  ?>
-  <div class="create_thread"> 
-  <?= $this->Form->control( 'thread', [
-      'type' => 'text',  
-      'label' => '新しいスレッドの作成',  
-      'div' => false,
-      'maxlength' => '128',
-      'class'=>'thread'
-    ])
-  ?>
+<!-- フォームの作成 -->
+<?= $this->Form->create(null,[
+    'type' => 'post',
+    'url' => ['controller' => 'Home', 'action' => 'submitForm']
+  ]) 
+?>
+<div class="create_thread"> 
+<?= $this->Form->control( 'thread', [
+    'type' => 'text',  
+    'label' => '新しいスレッドの作成',  
+    'div' => false,
+    'maxlength' => '128',
+    'class'=>'thread'
+  ])
+?>
 </div>
+<?php if($this->isAdminUser($users)):?>
+  <?= $this->Form->control( 'user_id', [
+          'type' => 'hidden',  
+          'value' => $users->id,
+          ])
+  ?>
+<?php endif;?>
+<!-- コントロールを配置 -->
+<div class = "create_botton"><?= $this->Form->submit('作成する') ?></div>
 
-  <!-- コントロールを配置 -->
-  <div class = "create_botton"><?= $this->Form->submit('作成する') ?></div>
-
-  <!-- フォームの終了 -->
-  <?= $this->Form->end() ?>
+<!-- フォームの終了 -->
+<?= $this->Form->end() ?>
 
 </html>
 <h2 class="weather">天気情報</h2>

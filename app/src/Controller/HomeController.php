@@ -32,6 +32,8 @@ class HomeController extends AppController
      *
      * @return void
      */
+    const CACHE_KEY = 'posts_data';
+    public $users;
     public function initialize()
     {
         parent::initialize();
@@ -64,16 +66,17 @@ class HomeController extends AppController
 
     public function index()
     {
-        $cacheKey = 'posts_data';
 
+        //dd($this->request->getSession()->read('Auth.User.id'));
+        //dd($this->Auth->user());
         // キャッシュからデータを読み込む
-        $cachedData = Cache::read($cacheKey);
+        $cachedData = Cache::read(self::CACHE_KEY);
         if (!$cachedData) {
             // キャッシュが存在しない場合、データベースから取得
             $data = $this->ThreadsTable->find()->toArray();
             //dd($data);
             // データをキャッシュに書き込む
-            Cache::write($cacheKey, $data, 'default');
+            Cache::write(self::CACHE_KEY, $data, 'default');
             
         }else {
             // キャッシュにデータが存在する場合の処理
@@ -88,12 +91,20 @@ class HomeController extends AppController
         $this->set('threads',$data);
         $this->set('title',$title);
 
+        if ($this->Auth->user()) {
+            //$this->set('loggedInUser', $this->Auth->user());//user_name をset
+            $userObject = json_decode(json_encode($this->Auth->user()));
+            $this->users = $this->UsersTable->getlist($userObject->user_name);
+            //dd($this->UsersTable->getlist($userObject->user_name));
+        }
+        $this->set('users', $this->users);
         //$weather_icon = $data['weather'][0]['icon'];
         //$temperature = $data['main']['temp'] - 273.15;
         //dd($weathers['list']);
         //dd(date('m/d', $weathers['list'][0]['dt']));
         //$this->set(compact('weather_icon','PlaceDescription','weatherDescription', 'temperature'));
         
+
         $this->set('weathers',(new WeatherApiService())->getWeathers());
     }
 
@@ -118,7 +129,7 @@ class HomeController extends AppController
         // 処理結果をビューに渡す
         $this->ThreadsTable->deleteThread($id);
         $this->CommentTable->deleteComments($id);
-        $this->CommentsgoodTable->deleteCommentgood($id);
+        $this->CommentsgoodTable->deleteCommentgoods($id);
         $cacheKey = 'posts_data';
         Cache::delete($cacheKey, 'default'); // キャッシュの削除
 
@@ -179,10 +190,15 @@ class HomeController extends AppController
     public function submitForm() {
         // POSTデータを取得
         $thread = $this->request->getData();
-        
         // 処理結果をビューに渡す
-        $this->ThreadsTable->createThreds($thread);
-
+        if($this->Auth->user()){
+            $users = $this->Auth->user();
+            $users = $this->UsersTable->getUser($users["user_name"]);
+            $this->ThreadsTable->createThredsUser($thread, $users->id);
+        }
+        else{
+            $this->ThreadsTable->createThreds($thread);
+        }
         $cacheKey = 'posts_data';
         Cache::delete($cacheKey, 'default'); // キャッシュの削除
         return $this->redirect(['controller' => 'Home', 'action' => 'index']);

@@ -27,11 +27,9 @@ class UsersController extends AppController
      *
      * @return void
      */
-
-
     public function initialize()
     {
-        $this->Auth = $this->loadComponent('Auth');
+        //$this->Auth = $this->loadComponent('Auth');
         parent::initialize();
 
         $this->ThreadsTable = TableRegistry::getTableLocator()->get("threads");
@@ -40,26 +38,6 @@ class UsersController extends AppController
         $this->CommentsgoodTable = TableRegistry::getTableLocator()->get("commentsgood");//アンダースコア(_)いらない
         
     }
-
-    public function index()
-    {
-        $title = "掲示板";
-        $this->set('threads',$this->ThreadsTable->getList());
-        if ($this->Auth->user()) {
-            $this->set('loggedInUser', $this->Auth->user());
-            $userObject = json_decode(json_encode($this->Auth->user()));
-            $this->set('users', $this->UsersTable->getUser($userObject->user_name));
-            //dd($this->UsersTable->getUser($userObject->user_name)   );
-        }
-        //$this->set('users',$this->UsersTable->getUser($user_name));
-        $this->set('title',$title);
-    }
-
-    public function thread($id)
-    {
-        $this->set('title',$title);
-    }
-
 
     public function login() {
         //$this->Auth = $this->loadComponent('Auth');
@@ -72,7 +50,7 @@ class UsersController extends AppController
             $this->Flash->success('ログイン成功しました');
             //$this->loggedInUser = $this->Auth->user();
             //dd($this->loggedInUser);
-            return $this->redirect(['controller' => 'Users', 'action' => 'index' ]);
+            return $this->redirect($this->referer());
             //$this->request->getSession()->write('clear_text', true);
             //$token = Security::hash($user->user_name . 'your-secret-key', 'sha256'); // ハッシュ化
             //$url = Router::url(['controller' => 'Users', 'action' => 'profile', '?' => ['token' => $token]], true);
@@ -81,7 +59,7 @@ class UsersController extends AppController
         } else {
             // ログイン失敗
             $this->Flash->error('ユーザー名またはパスワードが正しくありません。');
-            return $this->redirect(['controller' => 'Home', 'action' => 'index']);
+            return $this->redirect($this->referer());
         }
         
     }
@@ -111,7 +89,7 @@ class UsersController extends AppController
         //dd(debug($this->getRequest()->getSession()->read()));
         // リダイレクトなどの処理を行う
         $this->Flash->success('ログアウトしました。');
-        return $this->redirect(['controller' => 'Home', 'action' => 'index']);
+        return $this->redirect($this->referer());
     }
 
     public function usersubmitForm($user_id){
