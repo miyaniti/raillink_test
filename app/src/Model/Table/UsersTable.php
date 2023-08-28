@@ -59,8 +59,6 @@ class UsersTable extends AppTable
     public function getlist($username)
     {
         return $this->find()
-            ->select(['id'])
-            ->select(['user_name'])
             ->where(['user_name' => $username])
             ->first();
     }

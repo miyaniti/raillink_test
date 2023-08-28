@@ -46,28 +46,35 @@ class AppController extends Controller
         ]);
         $this->loadComponent('Flash');
 
-        /*
+        $this->viewBuilder()->setLayout('login');
+
+        
         $this->loadComponent('Auth', [
-            'authenticate' => [  //送信されたフォームデータのキーとログイン処理の「username」「password」を紐つける設定
+            'authenticate' => [
                 'Form' => [
-                    'userModel' => 'Users',
-                    'fields' => ['username' => 'username','password' => 'password']
+                    'fields' => [
+                        'username' => 'username',
+                        'password' => 'password'
+                    ]
                 ]
             ],
-            'loginAction' => [  //ログイン処理を実行する場所設定
-                'controller' => 'Users',
-                'action' => 'login'
-            ],
-            'loginRedirect' => [  //ログイン後のリダイレクト先設定
+            'loginAction' => [
                 'controller' => 'Home',
                 'action' => 'index'
             ],
-            'logoutRedirect' => [  //ログアウト後のリダイレクト先設定
+            'loginRedirect' => [
                 'controller' => 'Home',
                 'action' => 'index'
-            ]
-
+            ],
+            'unauthorizedRedirect' => $this->referer()
+            //'loginError' => 'Custom login error message' // カスタムのエラーメッセージを指定
         ]);
+
+        // 全ページをログインなしでアクセス可能にする
+        $this->Auth->allow();
+        // 特定のアクションを認証の対象外にする
+        
+
         /*
          * Enable the following component for recommended CakePHP security settings.
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html

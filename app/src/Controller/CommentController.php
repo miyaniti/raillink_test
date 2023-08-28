@@ -29,12 +29,14 @@ class CommentController extends AppController
      *
      * @return void
      */
+    public $users;
     public function initialize()
     {
         parent::initialize();
 
         $this->ThreadsTable = TableRegistry::getTableLocator()->get("threads");
         $this->CommentTable = TableRegistry::getTableLocator()->get("comments");
+        $this->UsersTable = TableRegistry::getTableLocator()->get("users");
         $this->CommentsgoodTable = TableRegistry::getTableLocator()->get("commentsgood");//アンダースコア(_)いらない
         
     }
@@ -44,25 +46,15 @@ class CommentController extends AppController
         $this->set('threads',$this->ThreadsTable->getThreds($id));
         $this->set('comments',$this->CommentTable->getComment($id));
         $this->set('thread_id', $id);
-    }
-
-    public function commentUser($id)
-    {
-        $usersController = new UsersController();
-        if($usersController->getlogin()){
-            $user_name = $usersController->getlogin();
-            $this->set('threads',$this->ThreadsTable->getThreds($id));
-            $this->set('comments',$this->CommentTable->getComment($id));
-            $this->set('thread_id', $id);
-            /*ログイン情報取得 */
-            $userlist = $usersController->getlist($user_name);
-            $this->set('user_name', $userlist->user_name);
-            $this->set('user_id', $userlist->id);
+        //user取得
+        if ($this->Auth->user()) {
+            
+            //$this->set('loggedInUser', $this->Auth->user());//user_name をset
+            $userObject = json_decode(json_encode($this->Auth->user()));
+            $this->users = $this->UsersTable->getlist($userObject->user_name);
+            //dd($this->UsersTable->getlist($userObject->user_name));
         }
-        else{
-            return $this->redirect("/comments/$id");
-        }
-
+        $this->set('users', $this->users);
     }
 
     public function thread($id)
@@ -78,6 +70,7 @@ class CommentController extends AppController
     {
         // 処理結果をビューに渡す
         $this->CommentTable->deleteComment($id);
+        $this->CommentsgoodTable->deleteCommentgood($id);
         return $this->redirect("/comments/$thread_id");
     }
 
@@ -98,18 +91,7 @@ class CommentController extends AppController
         //$routes->connect('/comments/:id', ['controller' => 'Comment', 'action' => 'comment'], ['pass' => ['id']]);
         // return $this->redirect('/thread/{$comment["thread_id"]}');
     }
-
-    public function createCommentUser() {
-        // POSTデータを取得
-        $comment = $this->request->getData();
-        // 処理結果をビューに渡す
-        $this->CommentTable->createComment($comment);
-
-        //$this->set('data', $this->request->getData());
-        return $this->redirect("/users/index/comments/{$comment['thread_id']}");
-        //$routes->connect('/comments/:id', ['controller' => 'Comment', 'action' => 'comment'], ['pass' => ['id']]);
-        // return $this->redirect('/thread/{$comment["thread_id"]}');
-    }
+/*
     public function deleteCommentUser($id, $thread_id)
     {
         // 処理結果をビューに渡す
@@ -117,6 +99,7 @@ class CommentController extends AppController
         $this->CommentsgoodTable->deleteCommentgood($id);
         return $this->redirect("/users/index/comments/$thread_id");
     }
+    */
 
     public function goodindexuser($comment_id){
         $usersController = new UsersController();
