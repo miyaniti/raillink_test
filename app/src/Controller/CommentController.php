@@ -69,7 +69,9 @@ class CommentController extends AppController
     public function deleteComment($id, $thread_id)
     {
         // 処理結果をビューに渡す
-        $this->CommentTable->deleteComment($id);
+        if(!$this->CommentTable->deleteComment($id));{
+            $this->Flash->error('このコメントは既に削除されています');
+        }
         $this->CommentsgoodTable->deleteCommentgood($id);
         return $this->redirect("/comments/$thread_id");
     }

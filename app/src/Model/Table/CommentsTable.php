@@ -7,7 +7,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\ORM\TableRegistry;
-
+use Cake\Datasource\Exception\RecordNotFoundException;
 /**
  * Threds Model
  *
@@ -28,6 +28,11 @@ class commentsTable extends AppTable
     const TABLE = "comments";
 
     const PUBLIC_FLAG = 2;
+    const FORBIDDEN_WORDS = [
+        "aaa",
+        "abc"
+        //削除対象のコメントを追加していく
+    ];
     /**
     * Initialize method
     *
@@ -45,6 +50,7 @@ class commentsTable extends AppTable
 
     public function getComment($id)
     {
+        //dd($this->find("all")->toArray());
         return $this->find()
             ->where(['thread_id' => $id])
             ->where(['flag' => self::PUBLIC_FLAG]);
@@ -65,11 +71,13 @@ class commentsTable extends AppTable
         $this->save($updateComment);
     }
     */
-    public function deleteComment($thread_id)
+    public function deleteComment($comment_id)
     {
-        if ($this->get($thread_id)) {
-            $deleteComment = $this->get($thread_id);
+        try {
+            $deleteComment = $this->get($comment_id);
             $this->delete($deleteComment);
+        } catch (RecordNotFoundException $e) {
+            return false;
         }
     }
 
@@ -88,7 +96,13 @@ class commentsTable extends AppTable
         //dd($comment["user_name"]);
         $newComment = $this->newEntity();
         $newComment->thread_id = $comment["thread_id"];
-        $newComment->user_name = $comment["user_name"];
+        //ユーザー名入力されているか確認
+        if(!empty($comment["user_name"])){
+            $newComment->user_name = $comment["user_name"];
+        }
+        else{
+            $newComment->user_name = "匿名";
+        }
         if(!empty($comment["user_id"])){
             $newComment->user_id = $comment["user_id"];
         }
@@ -97,6 +111,22 @@ class commentsTable extends AppTable
         //$newComment->comment = $this->newEntity($comment["comment"]);
         $this->save($newComment);
     }
+
+    //バッチ処理
+    public function removeComment(){
+        //$commentsTable = $this->find("all")->toArray();
+        $conditions = [
+            'comment IN' => self::FORBIDDEN_WORDS // FORBIDDEN_WORDSは禁止用語の配列です
+        ];
+        $query = $this->find()->where($conditions);
+        //dd($query);
+        // 3. 検索結果を取得し、それらのレコードを削除する
+        foreach ($query as $comment) {
+            $this->delete($comment);
+        }
+
+    }
+
     /**
     * Default validation rules.
     *
